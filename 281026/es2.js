@@ -14,11 +14,11 @@ const server = express()
 	.use((req, res) => res.sendFile('/index.html', { root: __dirname}))
 	.listen(PORT, () => console.log('Listening on ' + PORT);
 
-const ws_server = new Server({ server });
+const ws = new Server({ server });
 
 server.listen(PORT);
 
-ws_server.on('connection', (ws) => {
+ws.on('connection', (ws) => {
 	console.log('New client connected!');
 
 	ws.on('close', () => console.log('Client has disconnected'));
@@ -26,18 +26,16 @@ ws_server.on('connection', (ws) => {
 
 // --------------------------------
 
-let data = [];
-let index = 0;
-
-setInterval(() => {
-	for (let i=0;i<5;i++) {
-		if (i==index) data[i] = 1;
-		else data[i] = 0;
-	}
-	index = (index + 1) % data.length;
-
-	ws_server.clients.forEach((client) => {
-		client.send(data);
-	});
-
+ws.on('message', (data) => {
+    console.log('Message received');
+    const data = JSON.parse(data);
 }
+
+
+
+
+
+
+
+
+
